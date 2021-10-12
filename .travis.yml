@@ -1,0 +1,11 @@
+sudo: required #We need super user level permissions in order to process this build
+services:
+  - docker #Install a copy of Docker
+
+before_install:
+  #Series of steps that happen before we deploy our project and run tests
+  - docker build  -t lukec95/docker-react:latest -f Dockerfile.dev .
+
+script:
+  #Series of commands that tell travis CI what to do
+  - docker run -e CI=true lukec95/docker-react npm run test
