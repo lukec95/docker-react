@@ -9,3 +9,21 @@ before_install:
 script:
   #Series of commands that tell travis CI what to do
   - docker run -e CI=true lukec95/docker-react npm run test
+
+deploy:
+  #Travis CI comes inbuilt with providers it can deploy to, elasticbeanstalk is one of those
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  #app is the name of the Elastic Beanstalk Application we created
+  app: "docker-react"
+  #env is the name of the Elastic Beanstalk environment instance AWS created for us
+  env: "Dockerreact-env"
+  #When Travis CI deploys our code, it will zip them up into one single file and copy it to an S3 bucket so Elastic Beanstalk has access to it
+  bucket_name: "elasticbeanstalk-us-east-2-386379242846"
+  #The first time you deploy an app simply takes the app name as the default path
+  bucket_path: "docker-react"
+  #We will specify that this deployment only takes places when there is a push to the master branch
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
